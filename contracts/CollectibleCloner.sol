@@ -26,18 +26,15 @@ contract NFTFactory is Base, Cloner, FundForwarder, MultiDelegatecall {
         Base(authority_, Roles.FACTORY_ROLE)
     {}
 
-    function batchExecute(bytes[] calldata data_)
-        external
-        returns (bytes[] memory)
-    {
+    function batchExecute(
+        bytes[] calldata data_
+    ) external returns (bytes[] memory) {
         return _multiDelegatecall(data_);
     }
 
-    function setImplement(address implement_)
-        external
-        override
-        onlyRole(Roles.OPERATOR_ROLE)
-    {
+    function setImplement(
+        address implement_
+    ) external override onlyRole(Roles.OPERATOR_ROLE) {
         emit ImplementChanged(implement(), implement_);
         _setImplement(implement_);
     }
@@ -69,22 +66,20 @@ contract NFTFactory is Base, Cloner, FundForwarder, MultiDelegatecall {
             );
     }
 
-    function cloneOf(string calldata name_, string calldata symbol_)
-        external
-        view
-        returns (address, bool)
-    {
+    function cloneOf(
+        string calldata name_,
+        string calldata symbol_
+    ) external view returns (address, bool) {
         bytes32 salt = keccak256(
             abi.encodePacked(name_, symbol_, address(this), VERSION)
         );
         return _cloneOf(salt);
     }
 
-    function __saltOf(string calldata name_, string calldata symbol_)
-        private
-        view
-        returns (bytes32)
-    {
+    function __saltOf(
+        string calldata name_,
+        string calldata symbol_
+    ) private view returns (bytes32) {
         return
             keccak256(abi.encodePacked(name_, symbol_, address(this), VERSION));
     }

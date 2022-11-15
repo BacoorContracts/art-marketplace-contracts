@@ -78,18 +78,16 @@ contract Collectible721 is
         }
     }
 
-    function batchExecute(bytes[] calldata data_)
-        external
-        returns (bytes[] memory)
-    {
+    function batchExecute(
+        bytes[] calldata data_
+    ) external returns (bytes[] memory) {
         return _multiDelegatecall(data_);
     }
 
-    function mint(address to_, string calldata tokenURI_)
-        external
-        onlyRole(Roles.MINTER_ROLE)
-        returns (uint256 tokenId_)
-    {
+    function mint(
+        address to_,
+        string calldata tokenURI_
+    ) external onlyRole(Roles.MINTER_ROLE) returns (uint256 tokenId_) {
         tokenId_ = __mint(to_, tokenURI_);
     }
 
@@ -110,11 +108,10 @@ contract Collectible721 is
         tokenId_ = __mint(to_, tokenURI_);
     }
 
-    function mintBatch(address to_, string[] calldata tokenURIs_)
-        external
-        onlyRole(Roles.MINTER_ROLE)
-        returns (uint256[] memory tokenIds)
-    {
+    function mintBatch(
+        address to_,
+        string[] calldata tokenURIs_
+    ) external onlyRole(Roles.MINTER_ROLE) returns (uint256[] memory tokenIds) {
         tokenIds = __mintBatch(to_, tokenURIs_);
     }
 
@@ -135,23 +132,22 @@ contract Collectible721 is
         tokenIds = __mintBatch(to_, tokenURIs_);
     }
 
-    function updateTreasury(ITreasury treasury_)
-        external
-        override
-        onlyRole(Roles.OPERATOR_ROLE)
-    {
+    function updateTreasury(
+        ITreasury treasury_
+    ) external override onlyRole(Roles.OPERATOR_ROLE) {
         emit VaultUpdated(vault, address(treasury_));
         _changeVault(address(treasury_));
     }
 
-    function setBaseURI(string calldata baseURI_)
-        external
-        onlyRole(Roles.OPERATOR_ROLE)
-    {
+    function setBaseURI(
+        string calldata baseURI_
+    ) external onlyRole(Roles.OPERATOR_ROLE) {
         _setBaseURI(baseURI_);
     }
 
-    function supportsInterface(bytes4 interfaceId_)
+    function supportsInterface(
+        bytes4 interfaceId_
+    )
         public
         view
         override(
@@ -175,7 +171,9 @@ contract Collectible721 is
         return ERC721TokenReceiverUpgradeable.onERC721Received.selector;
     }
 
-    function tokenURI(uint256 tokenId)
+    function tokenURI(
+        uint256 tokenId
+    )
         public
         view
         override(ERC721URIStorageUpgradeable, ERC721Upgradeable)
@@ -190,10 +188,9 @@ contract Collectible721 is
             );
     }
 
-    function _burn(uint256 tokenId_)
-        internal
-        override(ERC721Upgradeable, ERC721URIStorageUpgradeable)
-    {
+    function _burn(
+        uint256 tokenId_
+    ) internal override(ERC721Upgradeable, ERC721URIStorageUpgradeable) {
         ERC721URIStorageUpgradeable._burn(tokenId_);
     }
 
@@ -217,10 +214,10 @@ contract Collectible721 is
         _checkBlacklist(to_);
     }
 
-    function __mint(address to_, string calldata tokenURI_)
-        private
-        returns (uint256 tokenId_)
-    {
+    function __mint(
+        address to_,
+        string calldata tokenURI_
+    ) private returns (uint256 tokenId_) {
         unchecked {
             _safeMint(
                 to_,
@@ -232,10 +229,10 @@ contract Collectible721 is
         if (bytes(tokenURI_).length != 0) _setTokenURI(tokenId_, tokenURI_);
     }
 
-    function __mintBatch(address to_, string[] calldata tokenURIs_)
-        private
-        returns (uint256[] memory tokenIds)
-    {
+    function __mintBatch(
+        address to_,
+        string[] calldata tokenURIs_
+    ) private returns (uint256[] memory tokenIds) {
         uint256 mintAmt = tokenURIs_.length;
         tokenIds = new uint256[](mintAmt);
 
