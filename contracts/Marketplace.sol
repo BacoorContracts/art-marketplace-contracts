@@ -4,7 +4,6 @@ pragma solidity >=0.8.17;
 import "./internal-upgradeable/BaseUpgradeable.sol";
 
 import "oz-custom/contracts/internal-upgradeable/ProtocolFeeUpgradeable.sol";
-import "oz-custom/contracts/internal-upgradeable/ProxyCheckerUpgradeable.sol";
 import "oz-custom/contracts/internal-upgradeable/FundForwarderUpgradeable.sol";
 
 import "./interfaces/IMarketplace.sol";
@@ -16,7 +15,6 @@ import "oz-custom/contracts/oz-upgradeable/utils/structs/EnumerableSetUpgradeabl
 contract Marketplace is
     IMarketplace,
     BaseUpgradeable,
-    ProxyCheckerUpgradeable,
     FundForwarderUpgradeable
 {
     using SSTORE2 for *;
