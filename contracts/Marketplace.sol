@@ -108,7 +108,7 @@ contract Marketplace is
         IERC721Upgradeable nft_,
         uint256 tokenId_
     ) external onlyRole(Roles.PROXY_ROLE) {
-        if (_hasRole(Roles.PROXY_ROLE, address(nft_)))
+        if (!_hasRole(Roles.PROXY_ROLE, address(nft_)))
             revert Marketplace__UnsupportedNFT();
 
         uint256 length = payments_.length;

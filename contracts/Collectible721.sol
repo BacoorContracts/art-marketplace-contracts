@@ -98,7 +98,7 @@ contract Collectible721 is
         uint256 value_
     ) external onlyRole(Roles.PROXY_ROLE) returns (uint256 tokenId_) {
         ITreasury treasury = ITreasury(vault);
-        if (treasury.supportedPayment(paymentToken_))
+        if (!treasury.supportedPayment(paymentToken_))
             revert Collectible721__UnsupportedPayments();
         if (
             value_.mulDivUp(treasury.priceOf(paymentToken_), 1 ether) <
@@ -122,7 +122,7 @@ contract Collectible721 is
         uint256 value_
     ) external onlyRole(Roles.PROXY_ROLE) returns (uint256[] memory tokenIds) {
         ITreasury treasury = ITreasury(vault);
-        if (treasury.supportedPayment(paymentToken_))
+        if (!treasury.supportedPayment(paymentToken_))
             revert Collectible721__UnsupportedPayments();
         if (
             value_.mulDivUp(ITreasury(vault).priceOf(paymentToken_), 1 ether) <
