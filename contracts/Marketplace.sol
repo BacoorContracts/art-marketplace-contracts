@@ -205,4 +205,6 @@ contract Marketplace is
         delete __listedItems[listingId_];
         __sellerOrders[seller_].remove(itemPtr_);
     }
+
+    uint256[48] private __gap;
 }
