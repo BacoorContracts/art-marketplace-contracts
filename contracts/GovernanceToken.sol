@@ -36,11 +36,11 @@ contract AM20 is
         __ERC20_init_unchained(name_, symbol_, decimals_);
     }
 
-    function mint(address to_, uint256 amount_)
-        external
-        onlyRole(Roles.MINTER_ROLE)
-    {
-        _mint(to_, amount_ * 10**decimals);
+    function mint(
+        address to_,
+        uint256 amount_
+    ) external onlyRole(Roles.MINTER_ROLE) {
+        _mint(to_, amount_ * 10 ** decimals);
     }
 
     function _beforeTokenTransfer(
@@ -57,11 +57,9 @@ contract AM20 is
         super._beforeTokenTransfer(from, to, amount);
     }
 
-    function updateTreasury(ITreasury treasury_)
-        external
-        override
-        onlyRole(Roles.OPERATOR_ROLE)
-    {
+    function updateTreasury(
+        ITreasury treasury_
+    ) external override onlyRole(Roles.OPERATOR_ROLE) {
         emit VaultUpdated(vault, address(treasury_));
         _changeVault(address(treasury_));
     }
