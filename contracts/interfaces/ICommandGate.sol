@@ -15,6 +15,17 @@ interface ICommandGate {
     error CommandGate__InvalidArgument();
     error CommandGate__UnknownAddress(address);
 
+    event Whitelisted(address indexed addr);
+
+    event Commanded(
+        address indexed to,
+        bytes4 indexed functionSelector,
+        bytes indexed params,
+        address from,
+        address token,
+        uint256 value
+    );
+
     function updateTreasury(ITreasury treasury_) external;
 
     function whitelistAddress(address addr_) external;

@@ -35,6 +35,10 @@ contract Collectible721 is
     using StringLib for uint256;
     using FixedPointMathLib for uint256;
 
+    /// @dev value is equal to keccak256("Collectible721_v1")
+    bytes32 public constant VERSION =
+        0x9de63d708ee09a8f840a47cc975044d19e4c3537fe6b165971d829e6619e0ffa;
+
     uint256 public constant CHAIN_ID_BIT_SLOT = 4;
 
     uint256 public mintPrice;

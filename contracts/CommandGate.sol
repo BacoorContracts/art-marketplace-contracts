@@ -42,6 +42,7 @@ contract CommandGate is
     function updateTreasury(
         ITreasury treasury_
     ) external onlyRole(Roles.OPERATOR_ROLE) {
+        emit VaultUpdated(vault, address(treasury_));
         _changeVault(address(treasury_));
     }
 
@@ -51,6 +52,8 @@ contract CommandGate is
         if (addr_ == address(authority()) || addr_ == vault)
             revert CommandGate__InvalidArgument();
         __isWhitelisted.set(addr_.fillLast96Bits());
+
+        emit Whitelisted(addr_);
     }
 
     function depositNativeTokenWithCommand(
@@ -62,14 +65,20 @@ contract CommandGate is
             revert CommandGate__UnknownAddress(contract_);
 
         _safeNativeTransfer(vault, msg.value);
-
+        address sender = _msgSender();
         __executeTx(
             contract_,
             fnSig_,
-            bytes.concat(
-                params_,
-                abi.encode(_msgSender(), address(0), msg.value)
-            )
+            bytes.concat(params_, abi.encode(sender, address(0), msg.value))
+        );
+
+        emit Commanded(
+            contract_,
+            fnSig_,
+            params_,
+            sender,
+            address(0),
+            msg.value
         );
     }
 
@@ -89,6 +98,8 @@ contract CommandGate is
         _safeERC20TransferFrom(token_, user, vault, value_);
         data_ = bytes.concat(data_, abi.encode(user, token_, value_));
         __executeTx(contract_, fnSig_, data_);
+
+        emit Commanded(contract_, fnSig_, data_, user, address(token_), value_);
     }
 
     function depositERC20PermitWithCommand(
@@ -114,6 +125,8 @@ contract CommandGate is
         );
         data_ = bytes.concat(data_, abi.encode(user, token_, value_));
         __executeTx(contract_, fnSig_, data_);
+
+        emit Commanded(contract_, fnSig_, data_, user, address(token_), value_);
     }
 
     function onERC721Received(
@@ -135,6 +148,8 @@ contract CommandGate is
             fnSig,
             bytes.concat(data, abi.encode(from_, nft, tokenId_))
         );
+
+        emit Commanded(target, fnSig, data, from_, address(nft), tokenId_);
 
         return this.onERC721Received.selector;
     }
