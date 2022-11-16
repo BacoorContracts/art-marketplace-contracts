@@ -29,19 +29,17 @@ contract Marketplace is
     mapping(address => EnumerableSetUpgradeable.Bytes32Set)
         private __sellerOrders;
 
-    function init(IAuthority authority_, ITreasury treasury_)
-        external
-        initializer
-    {
+    function init(
+        IAuthority authority_,
+        ITreasury treasury_
+    ) external initializer {
         __Base_init_unchained(authority_, Roles.TREASURER_ROLE);
         __FundForwarder_init_unchained(address(treasury_));
     }
 
-    function updateTreasury(ITreasury treasury_)
-        external
-        override
-        onlyRole(Roles.OPERATOR_ROLE)
-    {
+    function updateTreasury(
+        ITreasury treasury_
+    ) external override onlyRole(Roles.OPERATOR_ROLE) {
         emit VaultUpdated(vault, address(treasury_));
         _changeVault(address(treasury_));
     }
@@ -139,9 +137,10 @@ contract Marketplace is
         emit Listed(listingId, item);
     }
 
-    function modifyListingItem(uint256 listingId_, Item calldata item_)
-        external
-    {
+    function modifyListingItem(
+        uint256 listingId_,
+        Item calldata item_
+    ) external {
         bytes32 itemPtr = __listedItems[listingId_];
         if (itemPtr == 0) revert Marketplace__InvalidListingId();
 
@@ -162,11 +161,7 @@ contract Marketplace is
 
         __unlistItem(user, listingId_, itemPtr);
 
-        IWithdrawableUpgradeable(vault).withdraw(
-            address(item.nft),
-            user,
-            item.tokenId
-        );
+        IWithdrawableUpgradeable(vault).withdraw(address(item.nft), user, item.tokenId);
 
         emit Unlisted(listingId_, item);
     }
@@ -175,11 +170,9 @@ contract Marketplace is
         return abi.decode(__listedItems[listingId_].read(), (Item));
     }
 
-    function sellerOrders(address account_)
-        external
-        view
-        returns (Item[] memory orders)
-    {
+    function sellerOrders(
+        address account_
+    ) external view returns (Item[] memory orders) {
         uint256 length = __sellerOrders[account_].length();
         orders = new Item[](length);
 

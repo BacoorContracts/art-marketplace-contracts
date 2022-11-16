@@ -33,7 +33,6 @@ contract Authority is
         _grantRole(Roles.MINTER_ROLE, sender);
         _grantRole(Roles.OPERATOR_ROLE, sender);
         _grantRole(Roles.UPGRADER_ROLE, sender);
-        _grantRole(Roles.TREASURER_ROLE, sender);
 
         _setRoleAdmin(Roles.PAUSER_ROLE, Roles.OPERATOR_ROLE);
         _setRoleAdmin(Roles.MINTER_ROLE, Roles.OPERATOR_ROLE);
