@@ -96,10 +96,10 @@ contract Collectible721 is
     }
 
     function mint(
-        string calldata tokenURI_,
         address to_,
         address paymentToken_,
-        uint256 value_
+        uint256 value_,
+        string calldata tokenURI_
     ) external onlyRole(Roles.PROXY_ROLE) returns (uint256 tokenId_) {
         ITreasury treasury = ITreasury(vault);
         if (!treasury.supportedPayment(paymentToken_))

@@ -35,7 +35,7 @@ const config: HardhatUserConfig = {
             avalancheFujiTestnet: process.env.FUJI_API_KEY || "",
             bscTestnet: process.env.TBSC_API_KEY || "",
             goerli: process.env.ETH_API_KEY || "",
-            bsc: process.env.TBSC_API_KEY || ""
+            bsc: process.env.TBSC_API_KEY || "",
         },
     },
     networks: {

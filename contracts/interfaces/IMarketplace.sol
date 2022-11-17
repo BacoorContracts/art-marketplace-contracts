@@ -26,18 +26,18 @@ interface IMarketplace {
     event ItemModified(uint256 indexed listingId, Item indexed item);
 
     function buy(
-        uint256 listingId_,
         address buyer_,
         IERC20Upgradeable payment_,
-        uint256 value_
+        uint256 value_,
+        uint256 listingId_
     ) external;
 
     function listItem(
-        IERC20Upgradeable[] calldata payments_,
-        uint256 usdPrice_,
         address seller_,
         IERC721Upgradeable nft_,
-        uint256 tokenId_
+        uint256 tokenId_,
+        uint256 usdPrice_,
+        IERC20Upgradeable[] calldata payments_
     ) external;
 
     function modifyListingItem(

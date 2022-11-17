@@ -69,7 +69,7 @@ contract CommandGate is
         __executeTx(
             contract_,
             fnSig_,
-            bytes.concat(params_, abi.encode(sender, address(0), msg.value))
+            __concatDepositData(sender, address(0), msg.value, params_)
         );
 
         emit Commanded(
@@ -96,7 +96,7 @@ contract CommandGate is
         __checkUser(user);
 
         _safeERC20TransferFrom(token_, user, vault, value_);
-        data_ = bytes.concat(data_, abi.encode(user, token_, value_));
+        data_ = __concatDepositData(user, address(token_), value_, data_);
         __executeTx(contract_, fnSig_, data_);
 
         emit Commanded(contract_, fnSig_, data_, user, address(token_), value_);
@@ -123,7 +123,7 @@ contract CommandGate is
             address(this),
             value_
         );
-        data_ = bytes.concat(data_, abi.encode(user, token_, value_));
+        data_ = __concatDepositData(user, address(token_), value_, data_);
         __executeTx(contract_, fnSig_, data_);
 
         emit Commanded(contract_, fnSig_, data_, user, address(token_), value_);
@@ -146,7 +146,7 @@ contract CommandGate is
         __executeTx(
             target,
             fnSig,
-            bytes.concat(data, abi.encode(from_, nft, tokenId_))
+            __concatDepositData(from_, address(nft), tokenId_, data)
         );
 
         emit Commanded(target, fnSig, data, from_, address(nft), tokenId_);
@@ -181,6 +181,20 @@ contract CommandGate is
 
         if (!__isWhitelisted.get(target.fillLast96Bits()))
             revert CommandGate__UnknownAddress(target);
+    }
+
+    function __concatDepositData(
+        address account_,
+        address token_,
+        uint256 value_,
+        bytes memory data_
+    ) private pure returns (bytes memory) {
+        assembly {
+            mstore(add(data_, 32), account_)
+            mstore(add(data_, 64), token_)
+            mstore(add(data_, 96), value_)
+        }
+        return data_;
     }
 
     function __executeTx(

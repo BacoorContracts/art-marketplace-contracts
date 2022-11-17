@@ -26,6 +26,7 @@ contract Authority is
         __Pausable_init_unchained();
 
         address sender = _msgSender();
+
         _grantRole(DEFAULT_ADMIN_ROLE, sender);
 
         _grantRole(Roles.SIGNER_ROLE, sender);
