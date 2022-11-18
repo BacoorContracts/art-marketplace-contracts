@@ -161,7 +161,11 @@ contract Marketplace is
 
         __unlistItem(user, listingId_, itemPtr);
 
-        IWithdrawableUpgradeable(vault).withdraw(address(item.nft), user, item.tokenId);
+        IWithdrawableUpgradeable(vault).withdraw(
+            address(item.nft),
+            user,
+            item.tokenId
+        );
 
         emit Unlisted(listingId_, item);
     }
