@@ -32,10 +32,10 @@ interface ICollectible721 {
     ) external returns (uint256);
 
     function mint(
-        string calldata tokenURI_,
         address to_,
         address paymentToken_,
-        uint256 value_
+        uint256 value_,
+        string calldata tokenURI_
     ) external returns (uint256);
 
     function mintBatch(
