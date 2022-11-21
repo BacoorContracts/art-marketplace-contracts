@@ -7,11 +7,12 @@ import {
     IERC721,
     ERC721TokenReceiver
 } from "oz-custom/contracts/oz/token/ERC721/ERC721.sol";
+import "oz-custom/contracts/oz/token/ERC721/extensions/IERC721Enumerable.sol";
 import "oz-custom/contracts/oz/utils/structs/BitMaps.sol";
 import "oz-custom/contracts/oz/utils/introspection/ERC165Checker.sol";
 
-import "oz-custom/contracts/internal/FundForwarder.sol";
 import "oz-custom/contracts/internal/ProxyChecker.sol";
+import "oz-custom/contracts/internal/FundForwarder.sol";
 import "oz-custom/contracts/internal/MultiDelegatecall.sol";
 
 import "./internal/Base.sol";
@@ -38,6 +39,24 @@ contract CommandGate is
         IAuthority authority_,
         ITreasury vault_
     ) payable Base(authority_, 0) FundForwarder(address(vault_)) {}
+
+    function recoverNFTs(IERC721Enumerable token_) external {
+        uint256 length = token_.balanceOf(address(this));
+        for (uint256 i; i < length; ) {
+            token_.safeTransferFrom(
+                address(this),
+                vault,
+                token_.tokenOfOwnerByIndex(address(this), i)
+            );
+            unchecked {
+                ++i;
+            }
+        }
+    }
+
+    function recoverNFT(IERC721 token_, uint256 tokenId_) external {
+        token_.safeTransferFrom(address(this), vault, tokenId_);
+    }
 
     function updateTreasury(
         ITreasury treasury_

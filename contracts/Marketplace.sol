@@ -55,6 +55,24 @@ contract Marketplace is
         );
     }
 
+    function recoverNFTs(IERC721EnumerableUpgradeable token_) external {
+        uint256 length = token_.balanceOf(address(this));
+        for (uint256 i; i < length; ) {
+            token_.safeTransferFrom(
+                address(this),
+                vault,
+                token_.tokenOfOwnerByIndex(address(this), i)
+            );
+            unchecked {
+                ++i;
+            }
+        }
+    }
+
+    function recoverNFT(IERC721Upgradeable token_, uint256 tokenId_) external {
+        token_.safeTransferFrom(address(this), vault, tokenId_);
+    }
+
     function withdrawBonus(address token_, address account_) external override {
         uint256 claimable = _withdrawBonus(token_, account_);
         IWithdrawableUpgradeable(vault).withdraw(token_, account_, claimable);

@@ -3,6 +3,7 @@ pragma solidity ^0.8.15;
 
 import "oz-custom/contracts/oz-upgradeable/token/ERC20/IERC20Upgradeable.sol";
 import "oz-custom/contracts/oz-upgradeable/token/ERC721/IERC721Upgradeable.sol";
+import "oz-custom/contracts/oz-upgradeable/token/ERC721/extensions/IERC721EnumerableUpgradeable.sol";
 
 interface IMarketplace {
     error Marketplace__Unauthorized();
