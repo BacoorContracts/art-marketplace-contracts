@@ -47,6 +47,10 @@ contract Collectible721 is
 
     string public baseExtension;
 
+    constructor() payable {
+        _disableInitializers();
+    }
+
     function init(
         IAuthority authority_,
         ITreasury treasury_,

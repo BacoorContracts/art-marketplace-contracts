@@ -45,6 +45,10 @@ contract Treasury is
     mapping(bytes32 => uint256) private __priceOf;
     EnumerableSetV2.AddressSet private __payments;
 
+    constructor() payable {
+        _disableInitializers();
+    }
+
     function init(
         IAuthority authority_,
         AggregatorV3Interface priceFeed_

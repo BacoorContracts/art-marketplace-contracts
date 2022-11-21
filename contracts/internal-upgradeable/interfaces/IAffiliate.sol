@@ -18,7 +18,11 @@ interface IAffiliate {
         uint256 indexed claimedAmount
     );
 
-    event BonusAccumulated(address indexed token, uint256 indexed accumulated);
+    event BonusAccumulated(
+        address indexed token,
+        uint256 indexed payout,
+        uint256 indexed accumulated
+    );
 
     function withdrawBonus(address token_, address account_) external;
 

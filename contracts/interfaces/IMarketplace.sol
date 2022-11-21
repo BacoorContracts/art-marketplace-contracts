@@ -21,6 +21,13 @@ interface IMarketplace {
 
     event Listed(uint256 indexed listingId, Item indexed item);
 
+    event ItemBought(
+        uint256 indexed listingId,
+        address indexed buyer,
+        IERC20Upgradeable indexed payment,
+        uint256 payout
+    );
+
     event Unlisted(uint256 indexed listingId, Item indexed item);
 
     event ItemModified(uint256 indexed listingId, Item indexed item);

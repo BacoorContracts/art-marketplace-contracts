@@ -33,6 +33,10 @@ contract Marketplace is
     mapping(address => EnumerableSetUpgradeable.Bytes32Set)
         private __sellerOrders;
 
+    constructor() payable {
+        _disableInitializers();
+    }
+
     function init(
         IAuthority authority_,
         ITreasury treasury_,
@@ -155,6 +159,8 @@ contract Marketplace is
             item.tokenId
         );
         _updateAccumulatedBonus(address(payment_), payout);
+
+        emit ItemBought(listingId_, buyer_, payment_, payout);
     }
 
     function listItem(

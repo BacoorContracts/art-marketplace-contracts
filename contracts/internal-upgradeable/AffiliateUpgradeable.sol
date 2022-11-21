@@ -101,10 +101,12 @@ abstract contract AffiliateUpgradeable is IAffiliate, Initializable {
     function _updateAccumulatedBonus(address token_, uint256 volume_) internal {
         Bonus memory bonus = tokenBonuses[token_];
         if (bonus.fraction != 0) {
-            bonus.accumulated += uint96(
-                volume_.mulDivDown(bonus.fraction, __PERCENTAGE_FRACTION)
+            uint256 affiliatePayout = volume_.mulDivDown(
+                bonus.fraction,
+                __PERCENTAGE_FRACTION
             );
-            emit BonusAccumulated(token_, bonus.accumulated);
+            bonus.accumulated += uint96(affiliatePayout);
+            emit BonusAccumulated(token_, affiliatePayout, bonus.accumulated);
             tokenBonuses[token_].accumulated = bonus.accumulated;
         }
     }

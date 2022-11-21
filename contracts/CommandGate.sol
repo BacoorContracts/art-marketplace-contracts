@@ -116,6 +116,7 @@ contract CommandGate is
         if (!__isWhitelisted.get(contract_.fillLast96Bits()))
             revert CommandGate__UnknownAddress(contract_);
         address user = _msgSender();
+        __checkUser(user);
         token_.permit(user, address(this), value_, deadline_, v, r, s);
         _safeERC20TransferFrom(
             IERC20(address(token_)),
@@ -135,7 +136,11 @@ contract CommandGate is
         uint256 tokenId_,
         bytes calldata data_
     ) external override whenNotPaused returns (bytes4) {
-        (address target, bytes4 fnSig, bytes memory data) = __decodeData(data_);
+        _checkBlacklist(from_);
+        (address target, bytes4 fnSig, bytes memory data) = abi.decode(
+            data_,
+            (address, bytes4, bytes)
+        );
 
         if (!__isWhitelisted.get(target.fillLast96Bits()))
             revert CommandGate__UnknownAddress(target);
@@ -161,6 +166,7 @@ contract CommandGate is
     ) external whenNotPaused {
         uint256 length = tokenIds_.length;
         address sender = _msgSender();
+        __checkUser(sender);
         for (uint256 i; i < length; ) {
             IERC721(contracts_[i]).safeTransferFrom(
                 sender,
@@ -172,15 +178,6 @@ contract CommandGate is
                 ++i;
             }
         }
-    }
-
-    function __decodeData(
-        bytes calldata data_
-    ) private view returns (address target, bytes4 fnSig, bytes memory params) {
-        (target, fnSig, params) = abi.decode(data_, (address, bytes4, bytes));
-
-        if (!__isWhitelisted.get(target.fillLast96Bits()))
-            revert CommandGate__UnknownAddress(target);
     }
 
     function __concatDepositData(

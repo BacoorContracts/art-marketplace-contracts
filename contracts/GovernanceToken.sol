@@ -23,6 +23,10 @@ contract AM20 is
     bytes32 public constant VERSION =
         0x6e01d039b636caadd442e5221671597494f73a11123c34d2dfbc5caa7fbc5e3e;
 
+    constructor() payable {
+        _disableInitializers();
+    }
+
     function init(
         IAuthority authority_,
         ITreasury treasury_,
