@@ -41,6 +41,7 @@ interface IMarketplace {
     ) external;
 
     function listItem(
+        uint256 listingId_,
         address seller_,
         IERC721Upgradeable nft_,
         uint256 tokenId_,

@@ -33,6 +33,7 @@ contract Marketplace is
     mapping(address => EnumerableSetUpgradeable.Bytes32Set)
         private __sellerOrders;
 
+    /// @custom:oz-upgrades-unsafe-allow constructor
     constructor() payable {
         _disableInitializers();
     }
@@ -182,6 +183,7 @@ contract Marketplace is
     }
 
     function listItem(
+        uint256 listingId,
         address seller_,
         IERC721Upgradeable nft_,
         uint256 tokenId_,
@@ -200,10 +202,6 @@ contract Marketplace is
                 ++i;
             }
         }
-
-        uint256 listingId = uint256(
-            keccak256(abi.encode(seller_, nft_, tokenId_, payments_, usdPrice_))
-        );
 
         Item memory item = Item({
             nft: nft_,
