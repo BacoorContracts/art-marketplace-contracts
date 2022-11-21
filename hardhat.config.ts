@@ -1,96 +1,149 @@
 import "@nomicfoundation/hardhat-toolbox";
+import "@nomiclabs/hardhat-ethers";
+import "@nomiclabs/hardhat-etherscan";
 import "@openzeppelin/hardhat-upgrades";
-import * as dotenv from "dotenv";
+import "@typechain/hardhat";
+import { config as dotenvConfig } from "dotenv";
 import "hardhat-contract-sizer";
-import { HardhatUserConfig } from "hardhat/config";
-const {subtask} = require("hardhat/config");
-const {TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS} = require("hardhat/builtin-tasks/task-names")
+import "hardhat-gas-reporter";
+import type { HardhatUserConfig } from "hardhat/config";
+import type { NetworkUserConfig } from "hardhat/types";
+import { resolve } from "path";
 
-subtask(TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS)
-  .setAction(async (_: any, __: any, runSuper: () => any) => {
-    const paths = await runSuper();
+// import "./tasks/accounts";
+// import "./tasks/deploy";
 
-    return paths.filter((p: string) => !p.endsWith(".t.sol"));
-  });
+const dotenvConfigPath: string = process.env.DOTENV_CONFIG_PATH || "./.env";
+dotenvConfig({ path: resolve(__dirname, dotenvConfigPath) });
 
-dotenv.config();
+// Ensure that we have all the environment variables we need.
+const mnemonic: string | undefined = process.env.MNEMONIC;
+if (!mnemonic) {
+  throw new Error("Please set your MNEMONIC in a .env file");
+}
+
+const infuraApiKey: string | undefined = process.env.INFURA_API_KEY;
+if (!infuraApiKey) {
+  throw new Error("Please set your INFURA_API_KEY in a .env file");
+}
+
+const chainIds = {
+  mainnet: 1,
+  goerli: 5,
+  avalanche: 43114,
+  fuji: 43113,
+  bsc: 56,
+  tbsc: 97,
+  tomo: 88,
+  tomot: 89,
+  polygon: 137,
+  mumbai: 80001,
+  wraptag: 24052022,
+};
+
+function getChainConfig(chain: keyof typeof chainIds): NetworkUserConfig {
+  let jsonRpcUrl: string;
+  switch (chain) {
+    case "goerli":
+      jsonRpcUrl = process.env.GOERLI_URL || "";
+      break;
+    case "avalanche":
+      jsonRpcUrl = process.env.AVAX_URL || "";
+      break;
+    case "fuji":
+      jsonRpcUrl = process.env.FUJI_URL || "";
+      break;
+    case "bsc":
+      jsonRpcUrl = process.env.BSC_URL || "";
+      break;
+    case "tbsc":
+      jsonRpcUrl = process.env.BSCT_URL || "";
+      break;
+    case "polygon":
+      jsonRpcUrl = process.env.POLYGON || "";
+      break;
+    case "mumbai":
+      jsonRpcUrl = process.env.MUMBAI || "";
+      break;
+    case "tomo":
+      jsonRpcUrl = process.env.TOMO_URL || "";
+      break;
+    case "tomot":
+      jsonRpcUrl = process.env.TOMOT_URL || "";
+      break;
+    case "wraptag":
+      jsonRpcUrl = process.env.WRAPTAG_URL || "";
+      break;
+    default:
+      jsonRpcUrl = "https://" + chain + ".infura.io/v3/" + infuraApiKey;
+  }
+  return {
+    accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    chainId: chainIds[chain],
+    url: jsonRpcUrl,
+  };
+}
 
 const config: HardhatUserConfig = {
-    solidity: {
-        version: "0.8.17",
-        settings: {
-            // metadata: {
-            //     bytecodeHash: "ipfs",
-            //   },
-            optimizer: {
-                enabled: true,
-                runs: 1_000_000,
-            },
-            //evmVersion: "london"
-        },
-        
+  defaultNetwork: "hardhat",
+  etherscan: {
+    apiKey: {
+      mainnet: process.env.ETHERSCAN_API_KEY || "",
+      goerli: process.env.ETHERSCAN_API_KEY || "",
+      avalanche: process.env.SNOWTRACE_API_KEY || "",
+      avalancheFujiTestnet: process.env.SNOWTRACE_API_KEY || "",
+      bsc: process.env.BSCSCAN_API_KEY || "",
+      bscTestnet: process.env.BSCSCAN_API_KEY || "",
+      polygon: process.env.POLYGONSCAN_API_KEY || "",
+      polygonMumbai: process.env.POLYGONSCAN_API_KEY || "",
     },
-    etherscan: {
-        apiKey: {
-            avalancheFujiTestnet: process.env.FUJI_API_KEY || "",
-            bscTestnet: process.env.TBSC_API_KEY || "",
-            goerli: process.env.ETH_API_KEY || "",
-            bsc: process.env.TBSC_API_KEY || "",
-        },
-    },
-    networks: {
-        fuji: {
-            url: "https://api.avax-test.network/ext/C/rpc",
-            chainId: 43113,
-            accounts:
-                process.env.PRIVATE_KEY !== undefined
-                    ? [process.env.PRIVATE_KEY]
-                    : []
-        },
-        bsc: {
-            url: "https://bsc-dataseed1.binance.org/",
-            chainId: 56,
-            accounts:
-                process.env.PRIVATE_KEY !== undefined
-                    ? [process.env.PRIVATE_KEY]
-                    : []
-        },
-        bscTest: {
-            url: "https://bsctestapi.terminet.io/rpc",
-            chainId: 97,
-            accounts:
-                process.env.PRIVATE_KEY !== undefined
-                    ? [process.env.PRIVATE_KEY]
-                    : [],
-        },
-        goerli: {
-            url: "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161",
-            chainId: 5,
-            accounts:
-                process.env.PRIVATE_KEY !== undefined
-                    ? [process.env.PRIVATE_KEY]
-                    : [],
-        },
-        tomoTest: {
-            url: "https://rpc.testnet.tomochain.com",
-            chainId: 89,
-            accounts:
-                process.env.PRIVATE_KEY !== undefined
-                    ? [process.env.PRIVATE_KEY]
-                    : [],
-        }
-    },
-    contractSizer: {
-        alphaSort: true,
-        runOnCompile: true,
-        disambiguatePaths: false,
-    },
-    gasReporter: {
-        currency: "USD",
+  },
+  gasReporter: {
+    currency: "USD",
+    enabled: process.env.REPORT_GAS ? true : false,
+    excludeContracts: [],
+    src: "./contracts",
+  },
+  networks: {
+    mainnet: getChainConfig("mainnet"),
+    goerli: getChainConfig("goerli"),
+    avalanche: getChainConfig("avalanche"),
+    fuji: getChainConfig("fuji"),
+    bsc: getChainConfig("bsc"),
+    tbsc: getChainConfig("tbsc"),
+    tomo: getChainConfig("tomo"),
+    ttomo: getChainConfig("tomot"),
+    polygon: getChainConfig("polygon"),
+    mumbai: getChainConfig("mumbai"),
+    wraptag: getChainConfig("wraptag"),
+  },
+  paths: {
+    artifacts: "./artifacts",
+    cache: "./cache",
+    sources: "./contracts",
+    tests: "./test",
+  },
+  solidity: {
+    version: "0.8.17",
+    settings: {
+      metadata: {
+        bytecodeHash: "none",
+      },
+      optimizer: {
         enabled: true,
-        excludeContracts: [],
-        src: "./contracts",
+        runs: 800,
+      },
     },
+  },
+  typechain: {
+    outDir: "types",
+    target: "ethers-v5",
+  },
+  contractSizer: {
+    alphaSort: true,
+    runOnCompile: true,
+    disambiguatePaths: false,
+  },
 };
 
 export default config;

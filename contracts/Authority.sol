@@ -93,4 +93,6 @@ contract Authority is
     function _authorizeUpgrade(
         address newImplementation
     ) internal virtual override onlyRole(Roles.UPGRADER_ROLE) {}
+
+    uint256[46] private __gap;
 }

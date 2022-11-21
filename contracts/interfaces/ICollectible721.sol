@@ -7,6 +7,7 @@ import "./IAuthority.sol";
 interface ICollectible721 {
     error Collectible721__InsufficientAmount();
     error Collectible721__UnsupportedPayments();
+    error Collectible721__LengthMismatch();
 
     function init(
         IAuthority authority_,
@@ -39,12 +40,14 @@ interface ICollectible721 {
 
     function mintBatch(
         address to_,
+        uint256 quantity_,
         string[] calldata tokenURIs_
     ) external returns (uint256[] memory);
 
     function mintBatch(
         string[] calldata tokenURIs_,
         address to_,
+        uint256 quantity_,
         address paymentToken_,
         uint256 value_
     ) external returns (uint256[] memory);

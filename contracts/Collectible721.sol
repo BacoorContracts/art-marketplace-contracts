@@ -114,14 +114,16 @@ contract Collectible721 is
 
     function mintBatch(
         address to_,
+        uint256 quantity_,
         string[] calldata tokenURIs_
     ) external onlyRole(Roles.MINTER_ROLE) returns (uint256[] memory tokenIds) {
-        tokenIds = __mintBatch(to_, tokenURIs_);
+        tokenIds = __mintBatch(to_, quantity_, tokenURIs_);
     }
 
     function mintBatch(
         string[] calldata tokenURIs_,
         address to_,
+        uint256 quantity_,
         address paymentToken_,
         uint256 value_
     ) external onlyRole(Roles.PROXY_ROLE) returns (uint256[] memory tokenIds) {
@@ -133,7 +135,7 @@ contract Collectible721 is
             mintPrice * tokenURIs_.length
         ) revert Collectible721__InsufficientAmount();
 
-        tokenIds = __mintBatch(to_, tokenURIs_);
+        tokenIds = __mintBatch(to_, quantity_, tokenURIs_);
     }
 
     function updateTreasury(
@@ -235,9 +237,12 @@ contract Collectible721 is
 
     function __mintBatch(
         address to_,
+        uint256 quantity_,
         string[] calldata tokenURIs_
     ) private returns (uint256[] memory tokenIds) {
         uint256 mintAmt = tokenURIs_.length;
+        if (mintAmt > 0 && (quantity_ != mintAmt))
+            revert Collectible721__LengthMismatch(); // all or nothing
         tokenIds = new uint256[](mintAmt);
 
         uint256 _chainIdentifier = chainIdentifier;
