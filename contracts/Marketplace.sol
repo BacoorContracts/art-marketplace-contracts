@@ -2,6 +2,7 @@
 pragma solidity >=0.8.17;
 
 import "./internal-upgradeable/BaseUpgradeable.sol";
+import "./internal-upgradeable/AffiliateUpgradeable.sol";
 
 import "oz-custom/contracts/internal-upgradeable/ProtocolFeeUpgradeable.sol";
 import "oz-custom/contracts/internal-upgradeable/FundForwarderUpgradeable.sol";
@@ -15,7 +16,8 @@ import "oz-custom/contracts/oz-upgradeable/utils/structs/EnumerableSetUpgradeabl
 contract Marketplace is
     IMarketplace,
     BaseUpgradeable,
-    FundForwarderUpgradeable
+    FundForwarderUpgradeable,
+    AffiliateUpgradeable
 {
     using SSTORE2 for *;
     using FixedPointMathLib for uint256;
@@ -25,16 +27,70 @@ contract Marketplace is
     bytes32 public constant VERSION =
         0x58166ef1331604f9d1096f21021b62681af867d090bf7bef436de91286e1ed67;
 
+    uint256 public constant PERCENTAGE_FRACTION = 10_000;
+
     mapping(uint256 => bytes32) private __listedItems;
     mapping(address => EnumerableSetUpgradeable.Bytes32Set)
         private __sellerOrders;
 
     function init(
         IAuthority authority_,
-        ITreasury treasury_
+        ITreasury treasury_,
+        address[] calldata tokens_,
+        uint256[] calldata fractions_,
+        address[] calldata beneficiaries_,
+        uint256[] calldata affiliateBonuses_
     ) external initializer {
-        __Base_init_unchained(authority_, Roles.TREASURER_ROLE);
         __FundForwarder_init_unchained(address(treasury_));
+        __Base_init_unchained(authority_, Roles.TREASURER_ROLE);
+        __Affiliate_init_unchained(
+            tokens_,
+            fractions_,
+            beneficiaries_,
+            affiliateBonuses_
+        );
+    }
+
+    function withdrawBonus(address token_, address account_) external override {
+        uint256 claimable = _withdrawBonus(token_, account_);
+        _safeTransfer(IERC20Upgradeable(token_), account_, claimable);
+    }
+
+    function configAffiliate(
+        address[] calldata tokens_,
+        uint256[] calldata fractions_,
+        address[] calldata beneficiaries_,
+        uint256[] calldata affiliateBonuses_
+    ) external onlyRole(Roles.OPERATOR_ROLE) {
+        uint256 length = tokens_.length;
+        if (length != fractions_.length) revert Affiliate__LengthMismatch();
+
+        uint256[] memory tmp = fractions_;
+
+        uint16[] memory fractions;
+        assembly {
+            fractions := tmp
+        }
+        for (uint256 i; i < length; ) {
+            tokenBonuses[tokens_[i]].fraction = fractions[i];
+            unchecked {
+                ++i;
+            }
+        }
+
+        length = beneficiaries_.length;
+        if (length != affiliateBonuses_.length)
+            revert Affiliate__LengthMismatch();
+        tmp = affiliateBonuses_;
+        assembly {
+            fractions := tmp
+        }
+        for (uint256 i; i < length; ) {
+            _configAffiliate(beneficiaries_[i], fractions[i]);
+            unchecked {
+                ++i;
+            }
+        }
     }
 
     function updateTreasury(
@@ -98,6 +154,7 @@ contract Marketplace is
             buyer_,
             item.tokenId
         );
+        _updateAccumulatedBonus(address(payment_), payout);
     }
 
     function listItem(

@@ -21,10 +21,10 @@ interface ICollectible721 {
     ) external returns (uint256);
 
     function mint(
-        string calldata tokenURI_,
         address to_,
         address paymentToken_,
-        uint256 value_
+        uint256 value_,
+        string calldata tokenURI_
     ) external returns (uint256);
 
     function mintBatch(
@@ -64,18 +64,18 @@ interface IMarketplace {
     event ItemModified(uint256 indexed listingId, Item indexed item);
 
     function buy(
-        uint256 listingId_,
         address buyer_,
         IERC20Upgradeable payment_,
-        uint256 value_
+        uint256 value_,
+        uint256 listingId_
     ) external;
 
     function listItem(
-        IERC20Upgradeable[] calldata payments_,
-        uint256 usdPrice_,
         address seller_,
         IERC721Upgradeable nft_,
-        uint256 tokenId_
+        uint256 tokenId_,
+        uint256 usdPrice_,
+        IERC20Upgradeable[] calldata payments_
     ) external;
 
     function modifyListingItem(
@@ -97,18 +97,12 @@ contract ParamEncoder {
         address[] calldata nhungDongThanhToan_,
         uint256 giaDo_,
         address cho_
-    ) external pure returns (bytes memory) {
+    ) external pure returns (bytes memory params, bytes memory result) {
         address user;
         address token;
         uint256 value;
-        bytes memory params = abi.encode(
-            user,
-            token,
-            value,
-            nhungDongThanhToan_,
-            giaDo_
-        );
-        return abi.encode(cho_, IMarketplace.listItem.selector, params);
+        params = abi.encode(user, token, value, giaDo_, nhungDongThanhToan_);
+        result = abi.encode(cho_, IMarketplace.listItem.selector, params);
     }
 
     function lenhMuaNFT(
@@ -128,4 +122,17 @@ contract ParamEncoder {
         uint256 value;
         return abi.encode(user, token, value, linkHinhAnh_);
     }
+
+    // function decode(bytes memory data_) external pure returns (address sender_, address token, uint256 value_, uint256 price, address[] memory tokens) {
+    //     return abi.decode(data_, (address, address, uint256, uint256, address[]));
+    // }
+
+    // function concatData(address sender_, address token_, uint256 value_, bytes memory data_) external pure returns (bytes memory) {
+    //     assembly {
+    //         mstore(add(data_, 32), sender_)
+    //         mstore(add(data_, 64), token_)
+    //         mstore(add(data_, 96), value_)
+    //     }
+    //     return data_;
+    // }
 }
