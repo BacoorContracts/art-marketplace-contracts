@@ -57,7 +57,7 @@ contract Marketplace is
 
     function withdrawBonus(address token_, address account_) external override {
         uint256 claimable = _withdrawBonus(token_, account_);
-        _safeTransfer(IERC20Upgradeable(token_), account_, claimable);
+        IWithdrawableUpgradeable(vault).withdraw(token_, account_, claimable);
     }
 
     function configAffiliate(

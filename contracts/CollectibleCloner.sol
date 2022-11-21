@@ -10,7 +10,7 @@ import "./internal/Base.sol";
 import "./interfaces/ITreasury.sol";
 import "./interfaces/ICollectible721.sol";
 
-contract NFTFactory is Base, Cloner, FundForwarder, MultiDelegatecall {
+contract CollectibleCloner is Base, Cloner, FundForwarder, MultiDelegatecall {
     /// @dev value is equal to keccak256("CollectibleCloner_v1")
     bytes32 public constant VERSION =
         0xa8c6a324d9e999a7a85f4a5b54b78927575d1be8226ddaf15e1dbd2dc8fdaec7;
