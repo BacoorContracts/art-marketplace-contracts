@@ -115,7 +115,6 @@ abstract contract AffiliateUpgradeable is IAffiliate, Initializable {
         uint96 claimed_
     ) internal {
         claimed[token_][account_] += claimed_;
-        tokenBonuses[token_].accumulated += claimed_;
 
         emit Claimed(token_, account_, claimed_);
     }
