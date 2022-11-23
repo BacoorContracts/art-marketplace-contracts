@@ -20,7 +20,22 @@ interface IMarketplace {
         IERC20Upgradeable[] payments;
     }
 
-    event Listed(uint256 indexed listingId, Item indexed item);
+    event Listed(
+        uint256 indexed listingId,
+        address nft,
+        address seller,
+        uint256 tokenId,
+        uint256 usdPrice,
+        IERC20Upgradeable[] payments
+    );
+
+    event ItemModified(
+        uint256 indexed listingId,
+        uint256 usdPrice,
+        IERC20Upgradeable[] payments
+    );
+
+    event Unlisted(uint256 indexed listingId);
 
     event ItemBought(
         uint256 indexed listingId,
@@ -29,24 +44,20 @@ interface IMarketplace {
         uint256 payout
     );
 
-    event Unlisted(uint256 indexed listingId, Item indexed item);
-
-    event ItemModified(uint256 indexed listingId, Item indexed item);
-
     function buy(
+        uint256 listingId_,
         address buyer_,
         IERC20Upgradeable payment_,
-        uint256 value_,
-        uint256 listingId_
+        uint256 value_
     ) external;
 
     function listItem(
-        uint256 listingId_,
         address seller_,
         IERC721Upgradeable nft_,
         uint256 tokenId_,
         uint256 usdPrice_,
-        IERC20Upgradeable[] calldata payments_
+        IERC20Upgradeable[] calldata payments_,
+        uint256 listingId_
     ) external;
 
     function modifyListingItem(

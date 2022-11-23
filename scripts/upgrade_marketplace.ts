@@ -1,7 +1,7 @@
 import { Contract, ContractFactory } from "ethers";
 import { ethers, upgrades } from "hardhat";
 
-const proxyAddress: string = "0x2bB598104C24584189c26Be31B2727EBB74b254A";
+const proxyAddress: string = "0x0C336BD43791571E91a419569B20e8Ef18E30986";
 
 async function main(): Promise<void> {
   console.log("Deploying LogicV2 contract...");

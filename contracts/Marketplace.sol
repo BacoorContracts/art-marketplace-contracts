@@ -33,10 +33,10 @@ contract Marketplace is
     mapping(address => EnumerableSetUpgradeable.Bytes32Set)
         private __sellerOrders;
 
-    /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor() payable {
-        _disableInitializers();
-    }
+    // /// @custom:oz-upgrades-unsafe-allow constructor
+    // constructor() payable {
+    //     _disableInitializers();
+    // }
 
     function init(
         IAuthority authority_,
@@ -124,10 +124,10 @@ contract Marketplace is
     }
 
     function buy(
+        uint256 listingId_,
         address buyer_,
         IERC20Upgradeable payment_,
-        uint256 value_,
-        uint256 listingId_
+        uint256 value_
     ) external onlyRole(Roles.PROXY_ROLE) {
         bytes32 itemPtr = __listedItems[listingId_];
         if (itemPtr == 0) revert Marketplace__InvalidListingId();
@@ -183,12 +183,12 @@ contract Marketplace is
     }
 
     function listItem(
-        uint256 listingId,
         address seller_,
         IERC721Upgradeable nft_,
         uint256 tokenId_,
         uint256 usdPrice_,
-        IERC20Upgradeable[] calldata payments_
+        IERC20Upgradeable[] calldata payments_,
+        uint256 listingId
     ) external onlyRole(Roles.PROXY_ROLE) {
         if (!_hasRole(Roles.PROXY_ROLE, address(nft_)))
             revert Marketplace__UnsupportedNFT();
@@ -213,7 +213,14 @@ contract Marketplace is
 
         __listItem(seller_, listingId, item);
 
-        emit Listed(listingId, item);
+        emit Listed(
+            listingId,
+            address(item.nft),
+            item.seller,
+            item.tokenId,
+            item.usdPrice,
+            item.payments
+        );
     }
 
     function modifyListingItem(
@@ -228,7 +235,7 @@ contract Marketplace is
 
         __listedItems[listingId_] = abi.encode(item_).write();
 
-        emit ItemModified(listingId_, item_);
+        emit ItemModified(listingId_, item.usdPrice, item.payments);
     }
 
     function unlistItem(uint256 listingId_) external {
@@ -246,7 +253,7 @@ contract Marketplace is
             item.tokenId
         );
 
-        emit Unlisted(listingId_, item);
+        emit Unlisted(listingId_);
     }
 
     function order(uint256 listingId_) external view returns (Item memory) {
