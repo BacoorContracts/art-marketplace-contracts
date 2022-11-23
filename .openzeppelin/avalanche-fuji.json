@@ -3303,6 +3303,270 @@
             "label": "tokenBonuses",
             "offset": 0,
             "slot": "303",
+            "type": "t_mapping(t_address,t_struct(Bonus)1740_storage)",
+            "contract": "AffiliateUpgradeable",
+            "src": "contracts/internal-upgradeable/AffiliateUpgradeable.sol:17"
+          },
+          {
+            "label": "claimed",
+            "offset": 0,
+            "slot": "304",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_uint96))",
+            "contract": "AffiliateUpgradeable",
+            "src": "contracts/internal-upgradeable/AffiliateUpgradeable.sol:18"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "305",
+            "type": "t_array(t_uint256)47_storage",
+            "contract": "AffiliateUpgradeable",
+            "src": "contracts/internal-upgradeable/AffiliateUpgradeable.sol:124"
+          },
+          {
+            "label": "__listedItems",
+            "offset": 0,
+            "slot": "352",
+            "type": "t_mapping(t_uint256,t_bytes32)",
+            "contract": "Marketplace",
+            "src": "contracts/Marketplace.sol:32"
+          },
+          {
+            "label": "__sellerOrders",
+            "offset": 0,
+            "slot": "353",
+            "type": "t_mapping(t_address,t_struct(Bytes32Set)4076_storage)",
+            "contract": "Marketplace",
+            "src": "contracts/Marketplace.sol:33"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "354",
+            "type": "t_array(t_uint256)48_storage",
+            "contract": "Marketplace",
+            "src": "contracts/Marketplace.sol:299"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_bytes32)dyn_storage": {
+            "label": "bytes32[]",
+            "numberOfBytes": "32"
+          },
+          "t_array(t_uint256)47_storage": {
+            "label": "uint256[47]",
+            "numberOfBytes": "1504"
+          },
+          "t_array(t_uint256)48_storage": {
+            "label": "uint256[48]",
+            "numberOfBytes": "1536"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bytes32": {
+            "label": "bytes32",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_uint96))": {
+            "label": "mapping(address => mapping(address => uint96))",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_struct(Bonus)1740_storage)": {
+            "label": "mapping(address => struct IAffiliate.Bonus)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_struct(Bytes32Set)4076_storage)": {
+            "label": "mapping(address => struct EnumerableSetUpgradeable.Bytes32Set)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint16)": {
+            "label": "mapping(address => uint16)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_uint96)": {
+            "label": "mapping(address => uint96)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_bytes32,t_uint256)": {
+            "label": "mapping(bytes32 => uint256)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint256,t_bytes32)": {
+            "label": "mapping(uint256 => bytes32)",
+            "numberOfBytes": "32"
+          },
+          "t_struct(Bonus)1740_storage": {
+            "label": "struct IAffiliate.Bonus",
+            "members": [
+              {
+                "label": "fraction",
+                "type": "t_uint16",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "accumulated",
+                "type": "t_uint96",
+                "offset": 2,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "32"
+          },
+          "t_struct(Bytes32Set)4076_storage": {
+            "label": "struct EnumerableSetUpgradeable.Bytes32Set",
+            "members": [
+              {
+                "label": "_inner",
+                "type": "t_struct(Set)3882_storage",
+                "offset": 0,
+                "slot": "0"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_struct(Set)3882_storage": {
+            "label": "struct EnumerableSetUpgradeable.Set",
+            "members": [
+              {
+                "label": "_values",
+                "type": "t_array(t_bytes32)dyn_storage",
+                "offset": 0,
+                "slot": "0"
+              },
+              {
+                "label": "_indexes",
+                "type": "t_mapping(t_bytes32,t_uint256)",
+                "offset": 0,
+                "slot": "1"
+              }
+            ],
+            "numberOfBytes": "64"
+          },
+          "t_uint16": {
+            "label": "uint16",
+            "numberOfBytes": "2"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint96": {
+            "label": "uint96",
+            "numberOfBytes": "12"
+          }
+        }
+      }
+    },
+    "94f03e0564ace692001eaa52661b8a3397269265649d55f4f46828c466428ff5": {
+      "address": "0x8E312a15d2Fd51183fADc901Ff6e21A3E5Ca91cD",
+      "txHash": "0xd2713c1cb6ba27eef07cb88ee48234d36a55dd185cd80c8f4176d6abe52b0205",
+      "layout": {
+        "solcVersion": "0.8.17",
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256",
+            "contract": "Initializable",
+            "src": "oz-custom/contracts/oz-upgradeable/proxy/utils/Initializable.sol:65",
+            "retypedFrom": "bool"
+          },
+          {
+            "label": "_initializing",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256",
+            "contract": "Initializable",
+            "src": "oz-custom/contracts/oz-upgradeable/proxy/utils/Initializable.sol:70"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "oz-custom/contracts/oz-upgradeable/utils/ContextUpgradeable.sol:35"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ERC1967UpgradeUpgradeable",
+            "src": "oz-custom/contracts/oz-upgradeable/proxy/ERC1967/ERC1967UpgradeUpgradeable.sol:258"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "UUPSUpgradeable",
+            "src": "oz-custom/contracts/oz-upgradeable/proxy/utils/UUPSUpgradeable.sol:127"
+          },
+          {
+            "label": "_authority",
+            "offset": 0,
+            "slot": "152",
+            "type": "t_bytes32",
+            "contract": "BaseUpgradeable",
+            "src": "contracts/internal-upgradeable/BaseUpgradeable.sol:20"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "153",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "BaseUpgradeable",
+            "src": "contracts/internal-upgradeable/BaseUpgradeable.sol:110"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "202",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "TransferableUpgradeable",
+            "src": "oz-custom/contracts/internal-upgradeable/TransferableUpgradeable.sol:143"
+          },
+          {
+            "label": "vault",
+            "offset": 0,
+            "slot": "252",
+            "type": "t_address",
+            "contract": "FundForwarderUpgradeable",
+            "src": "oz-custom/contracts/internal-upgradeable/FundForwarderUpgradeable.sol:14"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "253",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "FundForwarderUpgradeable",
+            "src": "oz-custom/contracts/internal-upgradeable/FundForwarderUpgradeable.sol:49"
+          },
+          {
+            "label": "bonusRates",
+            "offset": 0,
+            "slot": "302",
+            "type": "t_mapping(t_address,t_uint16)",
+            "contract": "AffiliateUpgradeable",
+            "src": "contracts/internal-upgradeable/AffiliateUpgradeable.sol:16"
+          },
+          {
+            "label": "tokenBonuses",
+            "offset": 0,
+            "slot": "303",
             "type": "t_mapping(t_address,t_struct(Bonus)2165_storage)",
             "contract": "AffiliateUpgradeable",
             "src": "contracts/internal-upgradeable/AffiliateUpgradeable.sol:17"

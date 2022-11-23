@@ -124,10 +124,10 @@ contract Marketplace is
     }
 
     function buy(
-        uint256 listingId_,
         address buyer_,
         IERC20Upgradeable payment_,
-        uint256 value_
+        uint256 value_,
+        uint256 listingId_
     ) external onlyRole(Roles.PROXY_ROLE) {
         bytes32 itemPtr = __listedItems[listingId_];
         if (itemPtr == 0) revert Marketplace__InvalidListingId();

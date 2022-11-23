@@ -36,7 +36,7 @@ contract ParamEncoder {
         address user;
         address token;
         uint256 value;
-        return abi.encode(idSanPham_, user, token, value);
+        return abi.encode(user, token, value, idSanPham_);
     }
 
     function inNFTCoGia(

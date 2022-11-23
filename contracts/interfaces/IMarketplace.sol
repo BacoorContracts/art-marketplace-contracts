@@ -45,10 +45,10 @@ interface IMarketplace {
     );
 
     function buy(
-        uint256 listingId_,
         address buyer_,
         IERC20Upgradeable payment_,
-        uint256 value_
+        uint256 value_,
+        uint256 listingId_
     ) external;
 
     function listItem(
